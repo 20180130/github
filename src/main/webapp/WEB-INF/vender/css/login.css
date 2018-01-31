@@ -1,0 +1,58 @@
+*{
+	margin: 0px;
+}
+
+
+body {
+ background: url(../../vender/img/login_background.png) fixed center center no-repeat;
+ background-size: cover;
+ width: 600px;
+ height:400px;
+}
+ 
+#div{
+ 	background: url(../../vender/img/div.png) no-repeat;
+ 	background-size:100%100%;
+	width:500px;
+	height:320px;
+	position:absolute;
+	margin: auto;
+	top:0;
+	bottom: 0;
+	left:0;
+	right: 0;
+}
+
+#td_email{
+ 	background: url(../../vender/img/email.png);
+ 	background-size:100%100%;
+ 	position:absolute;
+ 	padding: 10px;
+ 	padding-left: 80px;
+ 	top:150px;
+ 	left:50px;
+}
+#email,#pwd{
+	width:180px;
+	background-color: transparent;
+	border: 0;
+	outline:none;
+	color:white;
+}
+#td_pwd{
+	background: url(../../vender/img/pwd.png);
+	background-size:100%100%;
+	position:absolute;
+	padding: 10px;
+ 	padding-left: 80px;
+ 	top:210px;
+ 	left:50px;
+}
+
+img{
+	position:absolute;
+	top:143px;
+	left:346px;
+	width:30%;
+}
+

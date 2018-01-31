@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<title>车辆运行监控</title>
+<script src="../vender/video.js/js/video.min.js"></script> 
+<!-- <script type="text/javascript" src="../vender/js/My97DatePicker/WdatePicker.js"></script> -->
+<!-- <SCRIPT type="text/javascript" src="../vender/ui/easy-ui/jquery.easyui.min.js"></SCRIPT>
+<script type="text/javascript" src="../vender/ui/easy-ui/locale/easyui-lang-zh_CN.js"></script> -->
+<!--  <SCRIPT type="text/javascript" src="../vender/ui/easy-ui/jquery.easyui.min.js"></SCRIPT> -->
+<SCRIPT type="text/javascript" src="../vender/laydate1/laydate.js"></SCRIPT>
+<link rel="stylesheet" type="text/css" href="../vender/datetimepicker-master/jquery.datetimepicker.css"/>
+<link href="../vender/video.js/css/video-js.css" rel="stylesheet">
+	
+<style type="text/css">
+* {
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	border: none;
+	
+}
+
+html, body {
+	height: 100%;
+}
+
+.page {
+	position: relative;
+	width: 1920px;
+	height: 1080px;
+	overflow: hidden;
+	background-color: black;
+	background: url(img/map.png);
+	background-size: 100% 100%;
+}
+
+.carImage {
+	background: url(img/xiaoche.png);
+	background-size: 100% 100%;
+}
+
+
+
+/* 交通事故syle  */
+
+.freezeblock{
+position:absolute;
+border:0px solid red;
+width:35px;
+height:35px;
+z-index:7;
+float:left;
+
+}
+
+.obliteratemenu{
+z-index:15;
+left:200px;
+top:100px;
+border:0px solid yellow;
+width:380px;
+height:220px;
+position:absolute;
+display:none;
+}
+
+
+
+.m {
+	width: 740px;
+	height: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+}
+
+
+</style>
+</head>
+<body  id="trafficaccidentmange">
+	<div class="page">
+
+	</div>
+	<script type="text/javascript" src="js/pageResponse.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+	<SCRIPT type="text/javascript" src="../vender/ui/easy-ui/jquery.easyui.min.js"></SCRIPT>
+<script type="text/javascript" src="../vender/ui/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+
+<SCRIPT type="text/javascript" src="../vender/js/menuload.js"></SCRIPT>
+	<script type="text/javascript">
+	//判断手机横竖屏状态：
+	window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+	        if (window.orientation === 180 || window.orientation === 0) {
+	            location.reload() 
+	        }
+	        if (window.orientation === 90 || window.orientation === -90 ){
+	            location.reload() 
+	        } 
+	    }, false);
+		window.onload = window.onresize = function() {
+			pageResponse({
+				selectors : 'div.page', //模块选择器，使用querySelectorAll的方法
+				mode : 'cover', // auto || contain || cover ，默认模式为auto 
+				width : '1920', //输入页面的宽度，只支持输入数值，默认宽度为1920px
+				height : '1080' //输入页面的高度，只支持输入数值，默认高度为1080px
+			})
+		}
+		$(document).ready(function(){
+			createDiv();
+		});
+		var seatX = 0*GetPercent(document.body.clientWidth,1920);
+		var seatY = 523*GetPercent(document.body.clientHeight,1080);
+		var seatX1 = 200*GetPercent(document.body.clientWidth,1920);
+		var seatY1 = 523*GetPercent(document.body.clientHeight,1080);
+		var carWidth = 100*GetPercent(document.body.clientWidth,1920);
+		//计算div的确切位置
+		function createDiv() {
+			//首先创建div
+			var descDiv = document.createElement('div');
+			document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX + 'px;top:'+ seatY+ 'px;';
+			//将样式添加到div上，显示div
+			descDiv.style.cssText = cssStr;
+		//	descDiv.innerHTML = '1';
+			//descDiv.id = 'car1';
+			//descDiv.style.display = 'block';
+			//descDiv.setAttribute("class", "carImage");
+
+			//首先创建div
+			var descDiv = document.createElement('div');
+			document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX1+ 'px;top:'+ seatY1+ 'px;';
+			//将样式添加到div上，显示div
+		//	descDiv.style.cssText = cssStr;
+			//descDiv.innerHTML = '2';
+			//descDiv.id = 'car2';
+			//descDiv.style.display = 'block';
+			//descDiv.setAttribute("class", "carImage");
+		}
+		   setInterval(moveCars, 500);//使用字符串执行方法 
+
+		function moveCars() {
+			//var car1 = document.getElementById('car1');
+			//car1.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX + 'px;top:' + seatY + 'px;';
+			//将样式添加到div上，显示div
+			//car1.style.cssText = cssStr;
+			seatX += 5;
+
+			//var car2 = document.getElementById('car2');
+			//car2.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX1 + 'px;top:' + seatY1 + 'px;';
+			//将样式添加到div上，显示div
+			//car2.style.cssText = cssStr;
+			//seatX1 += 5;
+		}
+		///计算两个整数的百分比值 
+		function GetPercent(num, total) {
+			num = parseFloat(num);
+			total = parseFloat(total);
+			if (isNaN(num) || isNaN(total)) {
+				return "-";
+			}
+			return total <= 0 ? "0%"
+					: (Math.round(num / total * 100) / 100.00);
+		}
+	</script>
+	
+<!-- 	
+	
+	
+ 	<div style='background:#C0C0C0;width:100%;height:106%;z-index: 999;position: absolute;opacity: 0.5;' id='backviw'>
+ 	</div> 
+		<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>
+          <div style='border:0px solid blue;float:left;width:300px;position: absolute;'>
+          	 <img  src='http://localhost:8080/Console/vender/img/eventicon/trafficaccidentback.png' class='clossfreezeblock' style='cursor:pointer;width:380px;height:220px;'>
+          </div>
+          
+          <div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;margin-top:0px;padding-top:30px;width:340px;height:200px;'>
+    	  <div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;padding-left:70px;padding-top:10px;width:310px;height:180px;'>
+          <img  src='http://localhost:8080/Console/vender/img/eventicon/accidentplayback.png' class='confirmmenu'   style='cursor:pointer;width:200px;'>
+          <img  src='http://localhost:8080/Console/vender/img/eventicon/invokingmonitor.png' class='confirmmenu'   style='cursor:pointer;width:200px;margin-top:8px;'>
+          <img  src='http://localhost:8080/Console/vender/img/eventicon/trafficamanagecontr.png' class='confirmmenu'   style='cursor:pointer;width:200px;margin-top:8px;'>
+          </div>
+          	</div>
+          	</div> -->
+	
+
+
+<!-- 
+		  	<div style='background:#C0C0C0;width:100%;height:106%;z-index: 18;position: absolute;opacity: 0.5;' id='backviw'>
+ 	         </div> 
+           		<div style='width:80%;height:85%;z-index: 19;position: absolute;left:5%;top:1%;border:0px solid red;' id='playbackviw'>
+           		<img  src='http://localhost:8080/Console/vender/img/eventicon/alertaccidentplayback.png' style='width:100%;height:110%;cursor:pointer;'>
+           			<div style='width:97%;height:107%;z-index: 17;position: absolute;left:0%;top:0%;border:0px solid red;' >
+           			 </div>
+           			 <div style='width:100%;height:107%;z-index: 17;position: absolute;left:0%;top:5%;border:0px solid blue;' >
+           			</div>
+           			<div style='background:#FFFFFF;width:97.4%;height:105.5%;z-index: 17;position: absolute;left:0.4%;top:3.4%;border:0px solid green;' >
+           			</div>
+           			</div>  -->
+           			
+           	
+           	
+    
+           	 
+           	
+           			
+
+           	<!-- <div style='background:#909090;width:100%;height:106%;z-index: 18;position: absolute;opacity: 0.5;' id='backviw'>
+           		</div>
+           		<div style='width:80%;height:85%;z-index: 18;position: absolute;left:5%;top:1%;border:0px solid red;' id='playbackviw'>
+           	<img  src='http://localhost:8080/Console/vender/img/eventicon/alertaccidentplayback.png' id='playbackviwid' style='width:100%;height:110%;cursor:pointer;'>
+           			<div style='width:97%;height:107%;z-index: 17;position: absolute;left:0%;top:0%;border:0px solid red;' >
+           		</div>
+           		 <div style='width:100%;height:107%;z-index: 17;position: absolute;left:0%;top:5%;border:0px solid blue;' >
+           		</div>
+           		<div style='width:97.4%;height:105.5%;z-index: 18;position: absolute;left:0.4%;top:3.4%;border:1px solid blue;' id='createplayback' >
+           	
+           	</div>
+           		 <div style='width:97.4%;height:105.5%;z-index: 19;position: absolute;left:0.4%;top:3.4%;border:1px solid green;' id='createplayback' >
+           	
+           	
+           <div style='left:0px;width:240px;height:20px;z-index: 17;position: absolute;border:1px solid green;bottom: 0px;'>
+            <div style='background:#FFFFFF;width:100px;height:20px;z-index: 17;position: absolute;border:1px solid green;bottom: 0px;font-size:10px;opacity: 0.5;' >
+           	开始  秒<select id='startsecond' style='background:#D0D0D0;border:1px solid #F8F8F8;height:20px;font-size:10px;'>
+           	      <option value='0'>-选择-</option>
+           	       <option value='5'>10</option>
+           	       <option value='10'>20</option>
+           	       <option value='10'>30</option>
+           	       <option value='10'>40</option>
+           	       <option value='10'>50</option>
+           	       <option value='10'>60</option>
+           	      </select>  
+
+           	</div>
+          
+           	   <div style='left:110px;background:#FFFFFF;width:100px;height:20px;z-index: 17;position: absolute;border:1px solid green;bottom: 0px;font-size:10px;opacity: 0.5;' >
+           	结束  秒<select id='endsecond' style='background:#D0D0D0;border:1px solid #F8F8F8;height:20px;font-size:10px;'>
+           	       <option value='0'>-选择-</option>
+           	       <option value='5'>10</option>
+           	       <option value='10'>20</option>
+           	       <option value='10'>30</option>
+           	       <option value='10'>40</option>
+           	       <option value='10'>50</option>
+           	       <option value='10'>60</option>
+           	      </select>  
+
+           	</div>
+           	
+           	<input type='button' value='确认' id='confirmmenu' style='left:215px;position: absolute;font-size:10px;height:20px;cursor:pointer;'>
+           	<input type='hidden' id='eventID' value=''>
+           	</div>
+           	
+           	</div>
+           	</div>   -->
+
+
+
+
+
+<input type='hidden' id='eventID' value=''>
+	
+	<script type="text/javascript">
+
+$(function(){
+	 parent.hiddentopimg();
+	var URL="/Console/trafficAccidentMangeCar/trafficAccidentList";
+	//alert(URL);
+    $.ajax({  
+        url:URL,   
+        type:'GET',  
+        success:function(data){  
+      	 // alert(data[0].id);
+      	// var themecombo2 =new Array();
+      	
+      	  $.each(data.data,function(i,da){
+      		  var left=da.startLng;
+      		  var top=da.startLat;
+      		// alert(da.eventState);
+      		var bblock="<div  class='freezeblock' style='left:"+left+"px;top:"+top+"px;'>";
+      		bblock=bblock+"<input type='hidden' id='eventID' value='"+da.eventID+"'/>";
+      		bblock=bblock+"<input type='hidden' id='carids' value='"+da.carids+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventTime' value='"+da.eventTime+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventState' value='"+da.eventState+"'/>";
+      		bblock=bblock+"<input type='hidden' id='overState' value='"+da.overState+"'/>";
+      		bblock=bblock+"<input type='hidden' id='startLng' value='"+da.startLng+"'/>";
+      		bblock=bblock+"<input type='hidden' id='startLat' value='"+da.startLat+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventSeq' value='"+da.eventSeq+"'/>";
+      		bblock=bblock+"<input type='hidden' id='accidentcar' value='"+da.accidentcar+"'/>";
+      		bblock=bblock+"<input type='hidden' id='carID' value='"+da.carID+"'/>";
+      		bblock=bblock+"<img  src='/Console/vender/img/eventicon/trafficaccident.png' class='blockoption' style='width:35xp;height:35px;cursor:pointer;'>";
+      		bblock=bblock+"</div>";
+      		
+      		$("#trafficaccidentmange").append(bblock);
+      		
+      	  });
+      
+      	  //弹出事故操作对话框
+          $(".freezeblock").click(function(){
+        	  var param=$(this).children('input');
+        	 $("#eventID").attr('value',param[0].value);
+           var left=	$(this).position().left;
+          	 var top=	$(this).position().top;
+          	var confirmd="";
+          	confirmd=confirmd+"<div  style='background:#909090;width:100%;height:106.5%;z-index:10;position: absolute;opacity: 0.5;' id='backviw'>";
+          	 confirmd=confirmd+"</div>";
+          	confirmd=confirmd+"<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>";
+          	confirmd=confirmd+"<div style='border:0px solid blue;float:left;width:300px;position: absolute;'>";
+          	confirmd=confirmd+" <img  src='http://localhost:8080/Console/vender/img/eventicon/trafficaccidentback.png' class='clossfreezeblock' style='cursor:pointer;width:380px;height:220px;'>";
+            	 confirmd=confirmd+"</div>";
+            	 confirmd=confirmd+"<div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;margin-top:0px;padding-top:30px;width:340px;height:200px;'>";
+            	 confirmd=confirmd+"<div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;padding-left:70px;padding-top:10px;width:310px;height:180px;'>";
+            	 confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/accidentplayback.png' class='aleretaccidentplaybackconfirmmenu'   style='cursor:pointer;width:200px;'>";
+            	 confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/invokingmonitor.png' class='invokingmonitorconfirmmenu'   style='cursor:pointer;width:200px;margin-top:8px;'>";
+            	 confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/trafficamanagecontr.png' class='trafficamanagecontrconfirmmenu'   style='cursor:pointer;width:200px;margin-top:8px;'>";
+            	 confirmd=confirmd+"</div>";
+            	 confirmd=confirmd+"</div>";
+            	 confirmd=confirmd+"</div>";
+          	
+          	
+          	var pp=	$(this).prev(".obliteratemenu").length;
+          	if(pp!=0){
+          		$(this).prev(".obliteratemenu").remove() ;	
+          	}
+          	$(this).before(confirmd);
+          	
+         	//关闭
+          	 $(".obliteratemenu").click(function(){
+             $("#backviw").remove();
+             $(this).remove();
+             });
+         	
+         	
+         	
+         	//事故回访
+           	  $(".aleretaccidentplaybackconfirmmenu").click(function(){
+           		  
+           		var confirmd="";
+           		confirmd=confirmd+"<div style='background:#909090;width:100%;height:106%;z-index: 18;position: absolute;opacity: 0.5;' id='backviw'>";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:80%;height:85%;z-index: 18;position: absolute;left:5%;top:1%;border:0px solid red;' id='playbackviw'>";
+           		confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/alertaccidentplayback.png' id='playbackviwid' style='width:100%;height:113%;cursor:pointer;'>";
+           		confirmd=confirmd+"<div style='width:97%;height:107%;z-index: 17;position: absolute;left:0%;top:0%;border:0px solid red;' >";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:100%;height:107%;z-index: 17;position: absolute;left:0%;top:5%;border:0px solid blue;' >";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:98%;height:109.5%;z-index: 18;position: absolute;left:0.7%;top:4.4%;border:0px solid blue;padding-right:0px;' id='createplayback' >";
+           	
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:97.4%;height:106.5%;z-index: 19;position: absolute;left:0.4%;top:3.4%;border:0px solid green;'  >";
+           	
+           	
+           		confirmd=confirmd+"<div style='left:2px;width:305px;height:25px;z-index: 17;position: absolute;border:1px solid green;bottom: 0px;'>";
+           		confirmd=confirmd+"<div style='background:#FFFFFF;width:255px;height:25px;z-index: 17;position: absolute;border:0px solid green;bottom: 0px;font-size:12px;opacity: 0.7;' >";
+           		confirmd=confirmd+"开始  秒<select id='startsecond' style='background:border:1px solid #F8F8F8;height:25px;font-size:12px;'>";
+           		confirmd=confirmd+"<option value='0'>-选择-</option>";
+           		confirmd=confirmd+"<option value='5'>10</option>";
+           		confirmd=confirmd+"<option value='10'>20</option>";
+           		confirmd=confirmd+"<option value='10'>30</option>";
+           		confirmd=confirmd+"<option value='10'>40</option>";
+           		confirmd=confirmd+"<option value='10'>50</option>";
+           		confirmd=confirmd+"<option value='10'>60</option>";
+           		confirmd=confirmd+"</select>";  
+
+           		confirmd=confirmd+"</div>";
+          
+           		confirmd=confirmd+"<div style='left:110px;background:#FFFFFF;width:100px;height:25px;top:0px;z-index: 17;position: absolute;border:0px solid green;bottom: 0px;font-size:12px;opacity: 0.7;' >";
+           		confirmd=confirmd+"结束  秒<select id='endsecond' style='background:border:0px solid #F8F8F8;height:25px;font-size:12px;'>";
+           		confirmd=confirmd+"<option value='0'>-选择-</option>";
+           		confirmd=confirmd+"<option value='5'>10</option>";
+           		confirmd=confirmd+"<option value='10'>20</option>";
+           		confirmd=confirmd+"<option value='10'>30</option>";
+           		confirmd=confirmd+"<option value='10'>40</option>";
+           		confirmd=confirmd+"<option value='10'>50</option>";
+           		confirmd=confirmd+"<option value='10'>60</option>";
+           		confirmd=confirmd+"</select>  ";
+
+           		confirmd=confirmd+"</div>";
+           	
+           		confirmd=confirmd+"<input type='button' value='确认' id='confirmmenu' style='left:255px;position: absolute;font-size:12px;height:25px;cursor:pointer;width:50px;'>";
+           		confirmd=confirmd+"</div>";
+           	
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"</div>  ";
+           			
+           		  
+           			$(this).parent().parent().parent().before(confirmd);
+           			
+           			//加载事故回放页面
+           			var href='http://10.0.1.40:8080/MonitorManagementSystem/callBackPage';
+           			//事故回放
+           		    $('#createplayback').panel({
+           		    	content:createFrame(href)
+           		    });
+           			
+           			//初始化回放数据
+           			
+           	    $('#confirmmenu').click(function(){
+           	 	var eventID=$("#eventID").attr('value');
+             	 var startsecond=$("#startsecond").val();
+           	    var endsecond=$("#endsecond").val();
+           	   var initUrl="/Console/trafficAccidentMangeCar/playTrafficAccidentToBack?eventID="+eventID+"&startsecond="+startsecond+"&endsecond="+endsecond;
+       			 var replayUrl="/Console/trafficAccidentMangeCar/playTrafficAccidentToBackStart";
+           	    	//var eventid=$('#eventID').attr('value');
+           	    	
+           	    	$.ajax({
+               	        url:initUrl,
+               	        global: false,
+               	        type: "GET",
+               	        success: function(data) {
+               	        //演示回放开始
+               	    	 $.ajax({
+                    	        url:replayUrl,
+                    	        global: false,
+                    	        type: "GET",
+                    	        success: function(data) {
+                    	        //演示回放开始
+                    	         //alert("success");
+                    	        }
+                    	    }) 
+               	         
+               	        }
+               	    }) 
+           	    	
+           	    });
+           	    
+           	    
+           	    
+           		  
+           		 	//事故回访关闭
+                 	 $("#playbackviwid").click(function(){
+                    $("#playbackviw").remove();
+                    $("#backviw").remove();
+                    $(this).remove();
+                    });
+               
+              });  
+         	
+         	//调取监控
+         	  $(".invokingmonitorconfirmmenu").click(function(){
+           		var confirmd="";
+           		confirmd=confirmd+"<div style='background:#C0C0C0;width:100%;height:106%;z-index: 18;position: absolute;opacity: 0.5;' id='videobackviw'>";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:80%;height:85%;z-index: 19;position: absolute;left:5%;top:1%;border:0px solid red;' id='playbackviw'>";
+           		confirmd=confirmd+"<img  src='http://localhost:8080/Console/vender/img/eventicon/alertaccidentvideoplayback.png' id='playvideo' style='width:100%;height:110%;cursor:pointer;'>";
+           		confirmd=confirmd+"<div style='width:97%;height:107%;z-index: 17;position: absolute;left:0%;top:0%;border:0px solid red;' >";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='width:100%;height:107%;z-index: 17;position: absolute;left:0%;top:5%;border:0px solid blue;' >";
+           		confirmd=confirmd+"</div>";
+           		confirmd=confirmd+"<div style='background:#FFFFFF;width:96%;height:103%;z-index: 17;position: absolute;left:1%;top:5%;border:0px solid green;' >";
+           		confirmd=confirmd+"<video id='example_video_1' class='video-js vjs-default-skin' controls preload='none' style='width:100%;height:100%;' data-setup='{}'>";
+           		confirmd=confirmd+"<source src='/Console/vender/img/eventicon/testblod.mp4' type='video/mp4' />";
+           		confirmd=confirmd+"</video>";
+           		confirmd=confirmd+"</div>  ";       			
+       			confirmd=confirmd+"</div> ";
+           		$(this).parent().parent().parent().before(confirmd);
+           		  
+           	  	//关闭视频
+               $("#playvideo").click(function(){
+               $("#playbackviw").remove();
+               $("#videobackviw").remove();
+               });
+              }); 
+         	
+         	//交通管控
+         	
+           	  $(".trafficamanagecontrconfirmmenu").click(function(){
+           	   parent.hellle('m3');
+                /*  alert("sdfsdfsd");
+                 $(window).attr('location','/Console/main/first?href=m3'); */
+                });
+         	
+          });	  
+      	  
+        }  
+       });  
+	
+    
+    //点击冰块图标显示清除冰块操作框
+
+    
+    //点击清除冰块操作狂关闭按钮隐藏操作框
+    
+  //点击清除冰块操作狂确认清除按钮请求清除冰块接口。同时关闭冰块清除确认框
+
+    
+    
+    
+})
+</script>
+
+</body>
+
+
+</html>

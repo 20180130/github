@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<title>车辆运行监控</title>
+<link rel="stylesheet" type="text/css" href="../vender/datetimepicker-master/jquery.datetimepicker.css"/>
+<style type="text/css">
+* {
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	border: none;
+	
+}
+
+html, body {
+	height: 100%;
+}
+
+.page {
+	position: relative;
+	width: 1920px;
+	height: 1080px;
+	overflow: hidden;
+	background-color: black;
+	background: url(img/map.png);
+	background-size: 100% 100%;
+}
+
+.carImage {
+	background: url(img/xiaoche.png);
+	background-size: 100% 100%;
+}
+
+
+.endfreezeblock{
+position:absolute;
+border:0px solid red;
+width:35px;
+height:35px;
+z-index:7;
+float:left;
+
+}
+
+.obliteratemenu{
+z-index:19;
+left:200px;
+top:100px;
+border:0px solid yellow;
+width:380px;
+height:220px;
+position:absolute;
+display:none;
+}
+
+
+
+.startfreezeblock{
+position:absolute;
+border:0px solid red;
+width:35px;
+height:35px;
+z-index:7;
+float:left;
+
+}
+
+
+
+
+</style>
+</head>
+<body id="publictrafficar">
+	<div class="page">
+
+	</div>
+	<script type="text/javascript" src="js/pageResponse.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+	<script type="text/javascript">
+	//判断手机横竖屏状态：
+	window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+	        if (window.orientation === 180 || window.orientation === 0) {
+	            location.reload() 
+	        }
+	        if (window.orientation === 90 || window.orientation === -90 ){
+	            location.reload() 
+	        } 
+	    }, false);
+		window.onload = window.onresize = function() {
+			pageResponse({
+				selectors : 'div.page', //模块选择器，使用querySelectorAll的方法
+				mode : 'cover', // auto || contain || cover ，默认模式为auto 
+				width : '1920', //输入页面的宽度，只支持输入数值，默认宽度为1920px
+				height : '1080' //输入页面的高度，只支持输入数值，默认高度为1080px
+			})
+		}
+		$(document).ready(function(){
+			createDiv();
+		});
+		var seatX = 0*GetPercent(document.body.clientWidth,1920);
+		var seatY = 523*GetPercent(document.body.clientHeight,1080);
+		var seatX1 = 200*GetPercent(document.body.clientWidth,1920);
+		var seatY1 = 523*GetPercent(document.body.clientHeight,1080);
+		var carWidth = 100*GetPercent(document.body.clientWidth,1920);
+		//计算div的确切位置
+		function createDiv() {
+			//首先创建div
+			var descDiv = document.createElement('div');
+			document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX + 'px;top:'+ seatY+ 'px;';
+			//将样式添加到div上，显示div
+			//descDiv.style.cssText = cssStr;
+			//descDiv.innerHTML = '1';
+			//descDiv.id = 'car1';
+			//descDiv.style.display = 'block';
+			//descDiv.setAttribute("class", "carImage");
+
+			//首先创建div
+			//var descDiv = document.createElement('div');
+			//document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX1+ 'px;top:'+ seatY1+ 'px;';
+			//将样式添加到div上，显示div
+			//descDiv.style.cssText = cssStr;
+			//descDiv.innerHTML = '2';
+			//descDiv.id = 'car2';
+			//descDiv.style.display = 'block';
+			//descDiv.setAttribute("class", "carImage");
+		}
+		   setInterval(moveCars, 500);//使用字符串执行方法 
+
+		function moveCars() {
+			//var car1 = document.getElementById('car1');
+			//car1.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX + 'px;top:' + seatY + 'px;';
+			//将样式添加到div上，显示div
+			//car1.style.cssText = cssStr;
+			//seatX += 5;
+
+			//var car2 = document.getElementById('car2');
+			//car2.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX1 + 'px;top:' + seatY1 + 'px;';
+			//将样式添加到div上，显示div
+			//car2.style.cssText = cssStr;
+			//seatX1 += 5;
+		}
+		///计算两个整数的百分比值 
+		function GetPercent(num, total) {
+			num = parseFloat(num);
+			total = parseFloat(total);
+			if (isNaN(num) || isNaN(total)) {
+				return "-";
+			}
+			return total <= 0 ? "0%"
+					: (Math.round(num / total * 100) / 100.00);
+		}
+	</script>
+	
+
+	 
+          
+	
+		<script type="text/javascript">
+		
+	$(function(){
+		 parent.replaytopimg();
+		 //创建管控
+		 $("#createcontroller" , parent.document).click(function(){
+			  var createbblock="";
+
+			  createbblock=createbblock+"<div  style='background:#909090;width:100%;height:106.5%;z-index:10;position: absolute;opacity: 0.5;' id='backviw'>";
+			  createbblock=createbblock+"</div>";
+			  createbblock=createbblock+"<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>";
+			  createbblock=createbblock+"<div style='border:0px solid blue;float:left;width:480px;position: absolute;'>";
+			  createbblock=createbblock+"<img  src='/Console/vender/img/eventicon/release_controllerback.png' class='clossfreezeblock' style='cursor:pointer;width:480px;'>";
+			  createbblock=createbblock+"</div>";
+			  createbblock=createbblock+"<div class='menud' style='border:0px solid red;float:left;z-index: 9999;position: absolute;margin-top:10px;padding-top:50px;width:440px;height:350px;'>";
+			  createbblock=createbblock+"<div class='menud' style='border:0px solid yellow;float:left;z-index: 9999;position: absolute;margin-top:5px;padding-top:0px;width:480px;height:350px;'>";
+			  createbblock=createbblock+"<div class='menud' style='border:0px solid pink;float:left;z-index: 9999;position: absolute;padding-left:50px;padding-top:0px;width:370px;height:280px;'>";
+			  createbblock=createbblock+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:5px;margin-top:5px;width:300px;'>   ";
+			  createbblock=createbblock+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:5px;width:50px;font-size:16px;'> ";
+			  createbblock=createbblock+"路段:</div> ";
+			  createbblock=createbblock+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:0px;margin-left:110px;width:250px;'> ";
+			  createbblock=createbblock+"<select id='roadcode' style='height:40px;width:230px;BACKGROUND-COLOR: transparent;border:0px solid #C8C8C8;font-size:16px;'>";
+			  createbblock=createbblock+"<option>-----请选择-----</option>";
+			  createbblock=createbblock+"<option value='五道口'>五道口</option>";
+			  createbblock=createbblock+"<option value='成府路西口内侧车道'>成府路西口内侧车道</option>";
+			  createbblock=createbblock+"<option value='成府路东口'>成府路东口</option>";
+			  createbblock=createbblock+"<option value='成府路东口内侧车道'>成府路东口内侧车道</option>";
+			  createbblock=createbblock+"<option value='成府路东口外侧车道'>成府路东口外侧车道</option>";
+		            
+			  createbblock=createbblock+"</select> ";
+			  createbblock=createbblock+"</div>   ";         
+			  createbblock=createbblock+"<img  src='/Console/vender/img/eventicon/textbacground.png' class='aleretaccidentplaybackconfirmmenu'   style='position: absolute;float:right;width:230px;height:40px;margin-left:110px;'>";
+			  createbblock=createbblock+"</div> ";
+		      
+			  createbblock=createbblock+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:60px;width:300px;margin-left:0px;'> "; 
+			  createbblock=createbblock+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:15px;width:100px;font-size:16px;'>"; 
+			  createbblock=createbblock+"管控类型:</div>"; 
+			  createbblock=createbblock+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:7px;margin-left:110px;width:250px;'> ";
+			  createbblock=createbblock+"<select  id='controcode' style='height:40px;width:230px;BACKGROUND-COLOR: transparent;border:0px solid #C8C8C8;font-size:16px;'>";
+			  createbblock=createbblock+"<option>-----请选择-----</option>";
+			  createbblock=createbblock+"<option value='1007'>禁止通行</option>";
+			  createbblock=createbblock+"<option value='1006'>取消并线</option>";
+			  createbblock=createbblock+"<option value='1008'>取消禁行</option>";
+			  createbblock=createbblock+"</select> ";
+			  createbblock=createbblock+"</div>   ";
+			  createbblock=createbblock+"<img  src='/Console/vender/img/eventicon/textbacground.png' class='invokingmonitorconfirmmenu'   style='float:right;width:230px;position: absolute;margin-top:8px;height:40px;margin-left:110px;'>";
+			  createbblock=createbblock+"</div>";
+			  createbblock=createbblock+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-left:50px;margin-top:130px;width:280px;'>  ";     
+			  createbblock=createbblock+"<img  src='/Console/vender/img/eventicon/createcontroller.png' class='trafficamanagecontrconfirmmenu'   style='cursor:pointer;width:280px;margin-top:8px;height:50px;'>";
+			  createbblock=createbblock+"</div>";
+			  createbblock=createbblock+"</div>";
+			  createbblock=createbblock+" </div>";
+			  createbblock=createbblock+" </div>";
+			  createbblock=createbblock+" </div>";
+			  
+			  
+			  
+			  
+			 var dialognum= $("#publictrafficar").children(".obliteratemenu").length;
+			 if(dialognum ==0){
+				$("#publictrafficar").append(createbblock);
+			 }
+	         	//关闭
+	          	 $(".clossfreezeblock").click(function(){
+	             $("#backviw").remove();
+	             $(".obliteratemenu").remove();
+	             });
+	         	
+	         	
+	        	 //确认创建
+	           	  $(".trafficamanagecontrconfirmmenu").click(function(){
+	           	
+	           		 //获取冰块编码
+	           		 var roadcoed=$("#roadcode").val();
+                       var roadtype=$("#controcode").val();
+                       $("#backviw").remove();
+      	             $(".obliteratemenu").remove();
+                       //alert(roadcoed+"===="+roadtype);
+	           		 // var param=$(this).parent().parent().next().children("input");
+	           		// var RoadID=param[0].value;
+	           		 //var Status="3";
+	           		  //向路政系统发送除冰请求
+	           		  //	$(this).parent().parent().next().remove()
+			           $.ajax({  
+			          url:'/Console/publicTrafficMangeCarController/createTrafficController',   
+			          type:'POST',
+			          contentType: 'application/json;charset=utf-8',
+			          data:JSON.stringify({rangeName:roadcoed,eventState:roadtype}),
+			          //data:{RoadI:"+roadcoed+"}",
+			          dataType: "json",
+			          success:function(data){ 
+			        	  var resulttext=data.data.info;
+			        	  var returncode=data.data.success;
+			        	  //alert(resulttext+"===="+returncode);
+			        	  // $(this).parent().parent().next().remove()
+			        		  alert("创建成功");
+			             }  
+			         });   	
+	           	 });  
+	         	
+			
+		 });
+		 
+	 
+               
+		 
+		  //管控的路段列表查询
+		 	 var URL="/Console/publicTrafficMangeCarController/getPublicTrafficController";
+			//alert(URL);
+		    $.ajax({  
+		        url:URL,   
+		        type:'GET',  
+		        success:function(data){  
+		  $.each(data.data,function(i,da){
+      		  var sleft=da.startLng;
+      		  var stop=da.startLat;
+      		// alert(sleft);
+      		  var bblock="";
+      		 bblock=bblock+"<div  class='startfreezeblock' style='left:"+sleft+"px;top:"+stop+"px;border:0px solid red;'>";
+      		  bblock=bblock+"<input type='hidden' id='cid' value='"+da.cid+"'>";
+      		 bblock=bblock+"<input type='hidden' id='eventState' value='"+da.eventState+"'>";
+      		 bblock=bblock+"<input type='hidden' id='rangeName' value='"+da.rangeName+"'>";
+      		 bblock=bblock+"<input type='hidden' id='startLng' value='"+da.startLng+"'>";
+      		 bblock=bblock+"<input type='hidden' id='startLat' value='"+da.startLat+"'>";
+      		 bblock=bblock+"<input type='hidden' id='endLng' value='"+da.endLng+"'>";
+      		 bblock=bblock+"<input type='hidden' id='entLat' value='"+da.entLat+"'>";
+      		 bblock=bblock+"<input type='hidden' id='eventStart' value='"+da.eventStart+"'>";
+      		 bblock=bblock+"<input type='hidden' id='eventSeq' value='"+da.eventSeq+"'>";
+      		 bblock=bblock+"<input type='hidden' id='conendtime' value='"+da.conendtime+"'>";
+      		 bblock=bblock+"<input type='hidden' id='constarttime' value='"+da.constarttime+"'>";
+      		 bblock=bblock+"<input type='hidden' id='constarttime' value='"+da.contype+"'>";
+      		 //alert(da.eventState);
+      		if(da.eventState==1007){
+      		 bblock=bblock+"<img  src='/Console/vender/img/eventicon/controllerline.png' class='blockoption' style='width:35xp;height:35px;cursor:pointer;'>";
+      		}else if(da.eventState==1003){
+      			 bblock=bblock+"<img  src='/Console/vender/img/eventicon/freezeblock.png' class='blockoption' style='width:35xp;height:35px;cursor:pointer;'>";
+
+      		}else if(da.eventState==1005){
+      			 bblock=bblock+"<img  src='/Console/vender/img/eventicon/trafficaccident.png' class='blockoption' style='width:35xp;height:35px;cursor:pointer;'>";
+
+      		}
+      		 bblock=bblock+"</div>";
+      		 
+     		$("#publictrafficar").append(bblock);
+     		if(da.eventState==1007){
+     		var eleft=da.endLng;
+     		var etop=da.entLat;
+     		  var endbblock="";
+     		endbblock=endbblock+"<div  class='endfreezeblock' style='left:"+eleft+"px;top:"+etop+"px;border:0px solid red;'>";
+     		endbblock=endbblock+"<input type='hidden' id='cid' value='"+da.cid+"'/>";
+     		endbblock=endbblock+"<input type='hidden' id='rangeName' value='"+da.rangeName+"'/>";
+     		endbblock=endbblock+"<input type='hidden' id='startLng' value='"+da.startLng+"'/>";
+     		endbblock=endbblock+"<input type='hidden' id='startLat' value='"+da.startLat+"'/>";
+     		endbblock=endbblock+"<input type='hidden' id='endLng' value='"+da.endLng+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='entLat' value='"+da.entLat+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='eventStart' value='"+da.eventStart+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='eventSeq' value='"+da.eventSeq+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='conendtime' value='"+da.conendtime+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='constarttime' value='"+da.constarttime+"'/>";
+       		endbblock=endbblock+"<input type='hidden' id='constarttime' value='"+da.contype+"'/>";
+       		endbblock=endbblock+"<img  src='http://localhost:8080/Console/vender/img/eventicon/controllerline.png' class='blockoption' style='width:35xp;height:35px;'>";
+       		endbblock=endbblock+"</div>";
+       		
+    		$("#publictrafficar").append(endbblock);
+     		}
+		  });
+		      
+		     //解除管控
+          $(".startfreezeblock").click(function(){
+            	var roadname= $(this).children('input');
+            	var eventstatename='';
+            	if(roadname[1].value==1003){
+            		eventstatename='结冰';
+            	}else if(roadname[1].value==1007){
+            		eventstatename='交通禁行';	
+            	}else if(roadname[1].value==1005){
+            		eventstatename='交通避让（并线）';	
+            	}  
+            	 //点击管控并显示弹出窗口  
+              var left=	$(this).position().left;
+              	 var top=	$(this).position().top;
+              	var confirmd="";
+              	  confirmd=confirmd+"<div  style='background:#909090;width:100%;height:106.5%;z-index:18;position: absolute;opacity: 0.5;' id='backviw'>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>";
+              	 confirmd=confirmd+"<div style='border:0px solid blue;float:left;width:480px;position: absolute;'>";
+              	 confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/release_controllerback.png' class='clossfreezeblock' style='cursor:pointer;'>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"<div class='menud' style='border:0px solid red;float:left;z-index: 9999;position: absolute;margin-top:0px;padding-top:30px;width:400px;height:350px;'>";
+              	 confirmd=confirmd+"<div class='menud' style='border:0px solid yellow;float:left;z-index: 9999;position: absolute;margin-top:2px;padding-top:0px;width:480px;height:350px;'>";
+              
+              	 confirmd=confirmd+"<div class='menud' style='border:0px solid pink;float:left;z-index: 9999;position: absolute;padding-left:45px;padding-top:15px;width:370px;height:280px;'>";
+              	 confirmd=confirmd+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:15px;width:300px;'>";    
+              	 confirmd=confirmd+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:10px;width:50px;font-size:16px;'> ";
+              	 confirmd=confirmd+"路段:</div>"; 
+              	 confirmd=confirmd+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:0px;margin-left:100px;width:250px;'>"; 
+              	 confirmd=confirmd+"<input type='text' id='roadname' style='height:40px;width:230px;background:rgba(0, 0, 0, 0);border:1px solid #C8C8C8;font-size:16px;' readonly='readonly' value='"+roadname[2].value+"' >";
+              
+              	 confirmd=confirmd+"</div>";            
+              	 confirmd=confirmd+"</div> "; 
+              	 confirmd=confirmd+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:70px;width:300px;margin-left:0px;'> ";
+              	 confirmd=confirmd+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:15px;width:100px;font-size:16px;'> ";
+              	 confirmd=confirmd+"管控类型:</div> ";
+              	
+              	 confirmd=confirmd+"<div  style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-top:7px;margin-left:100px;width:250px;'> ";
+              	 confirmd=confirmd+"<input type='text' id='managectrollertype' style='height:40px;width:230px;background:rgba(0, 0, 0, 0);border:1px solid #C8C8C8;font-size:16px;' readonly='readonly' value='"+eventstatename+"' >";
+              	 confirmd=confirmd+"</div>";  
+              	 confirmd=confirmd+"</div>";
+              	
+              	 confirmd=confirmd+"<div style='border:0px solid pink;float:left;z-index: 9999;position: absolute;margin-left:10px;margin-top:140px;width:280px;'>";  
+              	 confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/releasecontroller.png' class='trafficamanagecontrconfirmmenu'   style='cursor:pointer;width:280px;margin-top:8px;height:50px;'>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"</div>";
+              	 confirmd=confirmd+"</div>";  
+          
+              	var pp=	$(this).prev(".obliteratemenu").length;
+              	if(pp!=0){
+              		$(this).parent().prev(".obliteratemenu").remove() ;	
+              	}
+              	$(this).after(confirmd);
+              	
+             	//关闭
+              	 $(".clossfreezeblock").click(function(){
+                 $("#backviw").remove();
+                 $(".obliteratemenu").remove();
+                 });
+             	
+             	//解除管控
+               	  $(".trafficamanagecontrconfirmmenu").click(function(){
+               	
+               		 //获取管控编码
+               		  var param=$(".trafficamanagecontrconfirmmenu").parent().parent().parent().parent().parent().prev().prev().children("input");
+               		 //alert(param)
+               		 var cid=param[0].value;
+               		 //alert(RoadID);
+               		 // alert(param.get(0).value+"==="+param.get(1).value+"=="+param.get(2).value+"=="+param.get(3).value);
+               		// alert(param[0].value+"==="+param[1].value+"=="+param[2].value+"=="+param[3].value);
+               		if(param[1].value==1003||param[1].value==1005){
+               		       $(this).parent().parent().parent().parent().parent().prev().prev().remove();
+                	}else if(param[1].value==1007){
+                		//alert(param[1].value);
+                		 $(this).parent().parent().parent().parent().parent().next().remove();
+                   		 $(this).parent().parent().parent().parent().parent().prev().prev().remove();
+                	} 
+               		 
+               	     $("#backviw").remove();
+                     $(".obliteratemenu").remove();
+                     
+               		  //向管控系统发送解除管控请求
+               		  	$(this).parent().parent().next().remove()
+    	 	           $.ajax({  
+    		          url:'/Console/publicTrafficMangeCarController/releaseTrafficController',   
+    		          type:'POST', 
+    		          data:"{cid:"+cid+"}",
+    		          dataType: "json",
+    		          contentType: 'application/json;charset=utf-8',
+    		          success:function(data){ 
+    		        		  alert("解除成功");
+    		             }  
+    		         });   
+                   
+                  }); 
+            	
+            	
+              });	   
+		        
+		        
+		        
+		        
+		        
+		        } 
+		      
+		    
+		    
+		    
+		    
+		    
+		       }); 
+	
+		}) 
+		
+		
+		
+		</script>
+	<script type="text/javascript">
+
+	
+	</script>
+	
+</body>
+</html>

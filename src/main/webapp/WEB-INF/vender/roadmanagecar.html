@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<title>车辆运行监控</title>
+<style type="text/css">
+* {
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	border: none;
+	
+}
+
+html, body {
+	height: 100%;
+}
+
+.page {
+	position: relative;
+	width: 1920px;
+	height: 1080px;
+	overflow: hidden;
+	background-color: black;
+	background: url(img/map.png);
+	background-size: 100% 100%;
+}
+
+.carImage {
+	background: url(img/xiaoche.png);
+	background-size: 100% 100%;
+}
+.freezeblock{
+position:absolute;
+border:0px solid red;
+width:35px;
+height:35px;
+z-index:100;
+float:left;
+
+}
+
+.obliteratemenu{
+z-index:1999;
+left:200px;
+top:100px;
+border:0px solid yellow;
+width:300px;
+height:80px;
+position:absolute;
+display:none;
+}
+</style>
+</head>
+<body  id="freezblockb">
+	<div class="page">
+
+	</div>
+	<script type="text/javascript" src="js/pageResponse.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+	
+	<script type="text/javascript">
+	//判断手机横竖屏状态：
+	window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+	        if (window.orientation === 180 || window.orientation === 0) {
+	            location.reload() 
+	        }
+	        if (window.orientation === 90 || window.orientation === -90 ){
+	            location.reload() 
+	        } 
+	    }, false);
+		window.onload = window.onresize = function() {
+			pageResponse({
+				selectors : 'div.page', //模块选择器，使用querySelectorAll的方法
+				mode : 'cover', // auto || contain || cover ，默认模式为auto 
+				width : '1920', //输入页面的宽度，只支持输入数值，默认宽度为1920px
+				height : '1080' //输入页面的高度，只支持输入数值，默认高度为1080px
+			})
+		}
+		$(document).ready(function(){
+			createDiv();
+		});
+		var seatX = 0*GetPercent(document.body.clientWidth,1920);
+		var seatY = 523*GetPercent(document.body.clientHeight,1080);
+		var seatX1 = 200*GetPercent(document.body.clientWidth,1920);
+		var seatY1 = 523*GetPercent(document.body.clientHeight,1080);
+		var carWidth = 100*GetPercent(document.body.clientWidth,1920);
+		//计算div的确切位置
+		function createDiv() {
+			//首先创建div
+			var descDiv = document.createElement('div');
+			document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX + 'px;top:'+ seatY+ 'px;';
+			//将样式添加到div上，显示div
+			//descDiv.style.cssText = cssStr;
+			//descDiv.innerHTML = '1';
+			//descDiv.id = 'car1';
+			//descDiv.style.display = 'block';
+			//descDiv.setAttribute("class", "carImage");
+
+			//首先创建div
+			var descDiv = document.createElement('div');
+			document.body.appendChild(descDiv);
+			//给div设置样式，比如大小、位置
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;left:"
+			+ seatX1+ 'px;top:'+ seatY1+ 'px;';
+			//将样式添加到div上，显示div
+			//descDiv.style.cssText = cssStr;
+			//descDiv.innerHTML = '2';
+			//descDiv.id = 'car2';
+			//descDiv.style.display = 'block';
+		//	descDiv.setAttribute("class", "carImage");
+		}
+		   setInterval(moveCars, 500);//使用字符串执行方法 
+
+		function moveCars() {
+			var car1 = document.getElementById('car1');
+			car1.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX + 'px;top:' + seatY + 'px;';
+			//将样式添加到div上，显示div
+			car1.style.cssText = cssStr;
+			seatX += 5;
+
+			var car2 = document.getElementById('car2');
+			car2.style.position = "relative";
+			var cssStr = "z-index:5;width:"+carWidth+"px;height:auto;position:absolute;margin:0 auto;left:"
+					+ seatX1 + 'px;top:' + seatY1 + 'px;';
+			//将样式添加到div上，显示div
+			//car2.style.cssText = cssStr;
+			//seatX1 += 5;
+		}
+		///计算两个整数的百分比值 
+		function GetPercent(num, total) {
+			num = parseFloat(num);
+			total = parseFloat(total);
+			if (isNaN(num) || isNaN(total)) {
+				return "-";
+			}
+			return total <= 0 ? "0%"
+					: (Math.round(num / total * 100) / 100.00);
+		}
+		
+	
+	</script>
+	
+	
+ 	
+<!-- 	<div style='background:#C0C0C0;width:100%;height:106%;z-index: 999;position: absolute;opacity: 0.85;' id='icebackviw'>
+		</div> 
+	<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>
+          <div style='border:0px solid blue;float:left;width:300px;position: absolute;'>
+          <img  src='http://localhost:8080/Console/vender/img/eventicon/obliterateback.png' class='clossfreezeblock' style='cursor:pointer;width:300px;height:80px;'>
+          	</div>
+    	    <div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;margin-top:15px;width:260px;padding-left:40px;padding-top:10px;height:80px;'>
+          <img  src='http://localhost:8080/Console/vender/img/eventicon/obliterate.png' class='confirmmenu'   style='cursor:pointer;width:200px;'>
+          </div>
+          	</div>
+ -->
+
+
+	
+	
+</body>
+
+<script type="text/javascript">
+
+$(function(){
+	 parent.hiddentopimg();
+	var URL="/Console/roadManageCar/getRoadList";
+	//alert(URL);
+    $.ajax({  
+        url:URL,   
+        type:'GET',  
+        success:function(data){  
+      	
+      	  $.each(data.data,function(i,da){
+      		  var left=da.startLng;
+      		  var top=da.startLat;
+      		// alert(da.eventState);
+      		var bblock="";
+      		bblock=bblock+"<div  class='freezeblock' style='left:"+left+"px;top:"+top+"px;'>";
+      		bblock=bblock+"<input type='hidden' id='roadID' value='"+da.roadID+"'/>";
+      		bblock=bblock+"<input type='hidden' id='rangeName' value='"+da.rangeName+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventTime' value='"+da.eventTime+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventState' value='"+da.eventState+"'/>";
+      		bblock=bblock+"<input type='hidden' id='overState' value='"+da.overState+"'/>";
+      		bblock=bblock+"<input type='hidden' id='startLng' value='"+da.startLng+"'/>";
+      		bblock=bblock+"<input type='hidden' id='startLat' value='"+da.startLat+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventSeq' value='"+da.eventSeq+"'/>";
+      		bblock=bblock+"<input type='hidden' id='eventstateName' value='"+da.eventstateName+"'/>";
+      		bblock=bblock+"<input type='hidden' id='overstateName' value='"+da.overstateName+"'/>";
+      		bblock=bblock+"<img  src='/Console/vender/img/eventicon/freezeblock.png' class='blockoption' style='width:35xp;height:35px;cursor:pointer;'>";
+      		bblock=bblock+"</div>";
+      		
+      		$("#freezblockb").append(bblock);
+      		
+      	  });
+      
+          $(".freezeblock").click(function(){
+          	
+          var left=	$(this).position().left;
+          	 var top=	$(this).position().top;
+          	var confirmd="";
+          	confirmd=confirmd+"<div style='background:#909090;width:100%;height:106%;z-index: 999;position: absolute;opacity: 0.5;' id='icebackviw'>";
+          	confirmd=confirmd+"</div>";
+          	confirmd=confirmd+"<div  class='obliteratemenu' style='display:block;left:35%;top:30%;'>";
+          	confirmd=confirmd+"<div style='border:0px solid blue;float:left;width:360px;position: absolute;'>";
+          	confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/obliterateback.png' class='clossfreezeblock' style='cursor:pointer;width:360px;height:130px;'>";
+          	confirmd=confirmd+"</div>";
+          	confirmd=confirmd+"<div style='border:0px solid pink;float:left;width:280px;height:200px;position: absolute;top:1px;padding-left:20px;'>";
+          	confirmd=confirmd+" <div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;top:27px;width:260px;padding-left:20px;height:40px;padding-top:7px;font-size:16px;'>";
+          	confirmd=confirmd+"路政作业人员已完成道路除冰工作";
+          	confirmd=confirmd+"</div>";
+        	 
+          	confirmd=confirmd+"<div class='menud' style='border:0px solid blue;float:left;z-index: 9999;position: absolute;top:68px;width:260px;padding-left:40px;height:40px;'>";
+          	confirmd=confirmd+"<img  src='/Console/vender/img/eventicon/obliterate3.png' class='confirmmenu'   style='cursor:pointer;width:200px;'>";
+          	confirmd=confirmd+"</div>";
+          	confirmd=confirmd+"</div>";
+          	confirmd=confirmd+"</div>";
+      
+          	var pp=	$(this).prev(".obliteratemenu").length;
+          	if(pp!=0){
+          		$(this).parent().prev(".obliteratemenu").remove() ;	
+          	}
+          	$(this).before(confirmd);
+          	
+         	//关闭
+          	 $(".obliteratemenu").click(function(){
+             $("#icebackviw").remove();
+             $(this).remove();
+             });
+         	
+         	//确认
+           	  $(".confirmmenu").click(function(){
+           	
+           		 //获取冰块编码
+           		  var param=$(this).parent().parent().parent().next().children("input");
+           		 var RoadID=param[0].value;
+           		 var Status="3";
+           		  //向路政系统发送除冰请求
+           		  	$(this).parent().parent().next().remove()
+		           $.ajax({  
+		          url:'/Console/roadManageCar/removFreezeBlock',   
+		          type:'PUT', 
+		          data:"{RoadID:"+RoadID+"}",
+		          dataType: "json",
+		          contentType: 'application/json;charset=utf-8',
+		          success:function(data){ 
+		        	  var resulttext=data.data.info;
+		        	  var returncode=data.data.success;
+		        	  //alert(resulttext+"===="+returncode);
+		        	  // $(this).parent().parent().next().remove()
+		        	  alert("清除成功 ！");
+		             }  
+		         });  
+               
+              }); 
+        	
+        	
+          });	  
+      	  
+        }  
+       });  
+	
+    
+    //点击冰块图标显示清除冰块操作框
+
+    
+    //点击清除冰块操作狂关闭按钮隐藏操作框
+    
+  //点击清除冰块操作狂确认清除按钮请求清除冰块接口。同时关闭冰块清除确认框
+
+    
+    
+    
+})
+</script>
+</html>

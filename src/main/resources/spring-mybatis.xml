@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans.xsd    
+                        http://www.springframework.org/schema/context    
+                        http://www.springframework.org/schema/context/spring-context.xsd  
+                        http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-4.3.xsd 
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd  
+                        http://www.springframework.org/schema/mvc        
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+                        
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+	<mvc:annotation-driven />
+		<!-- 自动扫描 -->
+		<context:component-scan base-package="com.console"> 
+	</context:component-scan> 
+	
+	<!-- 引入配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			
+	
+	     <property name="locations">  
+           <list>  
+              <!-- 这里支持多种寻址方式：classpath和file -->  
+              <value>classpath*:db.properties</value>  
+             <value>classpath*:config.properties</value>  
+            </list>  
+        </property>  
+	</bean>
+
+	<!-- 阿里巴巴德鲁伊连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${initialSize}" />
+		<property name="minIdle" value="${minIdle}" />
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<!-- 测试 -->
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxOpenPreparedStatements" value="20" />
+		<!-- 配置监控统计拦截的filters,合并没有参数化的SQL -->
+		<property name="filters" value="mergeStat" />
+		<!-- 合并多个DruidDataSource的监控数据 -->
+		<property name="useGlobalDataSourceStat" value="true" />
+
+	</bean>
+
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:com/console/mapper/*.xml"></property>
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.console.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!-- 定义目标bean和bean中的方法 
+	<bean id="SpringQtzJob" class="com.hly.quartz.SpringQtz" />
+	<bean id="SpringQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="SpringQtzJob" />
+		</property>
+		<property name="targetMethod">  
+			<value>execute</value>
+		</property>
+	</bean>
+	-->
+	<!-- 定义定时账单生成的bean和bean中的方法 
+	<bean id="CreateBalanceQtzJob" class="com.hly.quartz.CreateBalanceQtz" />
+	<bean id="CreateBalanceQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="CreateBalanceQtzJob" />
+		</property>
+		<property name="targetMethod">  
+			<value>execute</value>
+		</property>
+	</bean>
+	-->
+	<!-- 定义锁定用户的bean和bean中的方法 
+	<bean id="LockUserQtzJob" class="com.hly.quartz.LockUserQtz" />
+	<bean id="LockUserQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="LockUserQtzJob" />
+		</property>
+		<property name="targetMethod">  
+			<value>execute</value>
+		</property>
+	</bean>
+    -->
+	<!-- ======================== 调度触发器 ========================
+	<bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethod"></property>
+		<property name="cronExpression" value="0/5 * * * * ?"></property>
+	</bean>
+	 -->
+	<!-- 定时生成账单调度器 
+	<bean id="CreateBalanceTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="CreateBalanceQtzJobMethod"></property>
+		<property name="cronExpression" value="0 00 01 22 * ?"></property>
+	</bean>
+	-->
+	<!-- 账户锁定调度器
+	<bean id="LockUserTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="LockUserQtzJobMethod"></property>
+		
+		<property name="cronExpression" value="0 00 01 25 * ?"></property>
+	</bean>
+    -->
+	<!-- ======================== 调度工厂 ======================== -->
+	<!-- <bean id="SpringJobSchedulerFactoryBean" lazy-init="false"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				定时任务测试
+				
+				<ref bean="CronTriggerBean" />
+				
+				生成账单定时任务
+				
+				<ref bean="CreateBalanceTriggerBean" />
+				
+				账户锁定定时任务
+				
+				<ref bean="LockUserTriggerBean" />
+				
+			</list>
+		</property>
+	</bean> -->
+
+</beans>  
